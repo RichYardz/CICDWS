@@ -111,5 +111,6 @@ jobs:
             *Matriculation:* A0291825X
             *Email:* E1335037@u.nus.edu
             *Git:* http://github.com/${{github.repository}}
+            *Image:* https://hub.docker.com/repository/docker/richyardz/go-fortune
           SLACK_TITLE: 'Image build and signed'
           SLACK_WEBHOOK: ${{ secrets.MY_OWN_SLACK }}
