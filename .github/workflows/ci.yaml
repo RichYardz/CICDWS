@@ -61,6 +61,9 @@ jobs:
         if: ${{ steps.ifTrivy.outputs.TRIVY_TABLE_EMPTY == 'false' }}
         run: exit 1
 
+      - name: cosign-installer
+        uses: sigstore/cosign-installer@v3.5.0
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -73,13 +76,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Create tag variable
+        id: TagVariable
+        run: |
+          echo "Tag=${{ secrets.DOCKERHUB_USERNAME }}/go-fortune:${{ github.sha }}" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           file: go-fortune/Dockerfile
           context: go-fortune/
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/go-fortune:${{ github.sha }}
+          tags: ${{ steps.TagVariable.outputs.Tag }}
+
+
 
       - name: Slack notification success
         uses: rtCamp/action-slack-notify@v2
