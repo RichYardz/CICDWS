@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, '#NORUN')"
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.4
@@ -39,7 +40,7 @@ jobs:
           SLACK_CHANNEL: ${{ secrets.MY_OWN_CID }}
           SLACK_COLOR: '#D00A07'
           SLACK_MESSAGE: 'Failed trivy scan, see uploaded report'
-          SLACK_TITLE: 'Scan failed - RichYardz'
+          SLACK_TITLE: 'Scan failed - Binghao Yan'
           SLACK_WEBHOOK: ${{ secrets.MY_OWN_SLACK }}
 
       - name: Convert table file to text file
@@ -55,7 +56,7 @@ jobs:
           slack_token: ${{ secrets.MY_OWN_TOKEN }}
           channel_id: ${{ secrets.MY_OWN_CID }}
           file_path: 'trivy-results.txt'
-          initial_comment: 'post by slack-upload-file'
+          initial_comment: 'Scan report by Binghao Yan'
 
       - name: Terminate pipeline
         if: ${{ steps.ifTrivy.outputs.TRIVY_TABLE_EMPTY == 'false' }}
