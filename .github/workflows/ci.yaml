@@ -89,7 +89,17 @@ jobs:
           push: true
           tags: ${{ steps.TagVariable.outputs.Tag }}
 
-
+      - name: Sign image with a key
+        run: |
+          images=""
+          for tag in ${TAGS}; do
+            images+="${tag} "
+          done
+          cosign sign --yes --key env://COSIGN_PRIVATE_KEY ${images}
+        env:
+          TAGS: ${{ steps.TagVariable.outputs.Tag }}
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
       - name: Slack notification success
         uses: rtCamp/action-slack-notify@v2
