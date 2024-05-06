@@ -21,7 +21,7 @@ jobs:
           ignore-unfixed: true
           format: 'table'
           output: 'trivy-results.table'
-          severity: 'CRITICAL'
+          severity: 'HIGH'
 
       - name: Check Trivy results
         id: ifTrivy
